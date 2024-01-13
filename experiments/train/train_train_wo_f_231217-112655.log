@@ -1,0 +1,570 @@
+23-12-17 11:26:55.682 - INFO:   name: train_wo_f
+  use_tb_logger: False
+  model: enhancement_model
+  distortion: sr
+  scale: 1
+  gpu_ids: [0]
+  datasets:[
+    train:[
+      name: ll_dataset
+      interval_list: [1]
+      random_reverse: False
+      border_mode: False
+      dataroot_GT: /root/autodl-fs/Training data/Huawei/high
+      dataroot_LQ: /root/autodl-fs/Training data/Huawei/low
+      n_workers: 3
+      batch_size: 8
+      GT_size: 384
+      LQ_size: 384
+      use_flip: True
+      use_rot: True
+      color: RGB
+      phase: train
+      scale: 1
+      data_type: img
+    ]
+    val:[
+      name: ll_dataset
+      dataroot_GT: /root/autodl-fs/Eval/Huawei/high
+      dataroot_LQ: /root/autodl-fs/Eval/Huawei/low
+      train_size: [600, 400]
+      phase: val
+      scale: 1
+      data_type: img
+    ]
+  ]
+  network_G:[
+    which_model_G: FourLLIE
+    nf: 16
+    scale: 1
+  ]
+  path:[
+    root: ./
+    strict_load: False
+    experiments_root: ./experiments/train_wo_f
+    models: ./experiments/train_wo_f/models
+    training_state: ./experiments/train_wo_f/training_state
+    log: ./experiments/train_wo_f
+    val_images: ./experiments/train_wo_f/val_images
+  ]
+  train:[
+    lr_G: 0.0001
+    lr_scheme: MultiStepLR
+    beta1: 0.9
+    beta2: 0.99
+    niter: 100000
+    lr_steps: [15000, 22000, 30000, 50000, 80000]
+    ft_tsa_only: 0
+    warmup_iter: 100
+    lr_gamma: 0.5
+    eta_min: 1e-07
+    pixel_criterion: cb
+    pixel_weight: 1.0
+    val_freq: 1000.0
+    manual.resize960x512_seed: 0
+  ]
+  logger:[
+    print_freq: 1000
+    save_checkpoint_freq: 1000.0
+  ]
+  is_train: True
+  dist: False
+
+23-12-17 11:26:55.683 - INFO: Random seed: 5631
+23-12-17 11:26:55.859 - INFO: Dataset [ll_dataset - ll_dataset] is created.
+23-12-17 11:26:55.860 - INFO: Number of train images: 2,450, iters: 307
+23-12-17 11:26:55.860 - INFO: Total epochs needed: 326 for iters 100,000
+23-12-17 11:26:55.889 - INFO: Dataset [ll_dataset - ll_dataset] is created.
+23-12-17 11:26:55.889 - INFO: Number of val images in [ll_dataset]: 30
+23-12-17 11:27:23.571 - INFO: Network G structure: DataParallel - FourLLIE, with parameters: 119,446
+23-12-17 11:27:23.572 - INFO: FourLLIE(
+  (AmpNet): Sequential(
+    (0): AmplitudeNet_skip(
+      (conv0): Sequential(
+        (0): Conv2d(3, 8, kernel_size=(1, 1), stride=(1, 1))
+        (1): ProcessBlock(
+          (spatial_process): SpaBlock(
+            (block): Sequential(
+              (0): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (3): LeakyReLU(negative_slope=0.1, inplace=True)
+            )
+          )
+          (frequency_process): FreBlock(
+            (fpre): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            (process1): Sequential(
+              (0): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (process2): Sequential(
+              (0): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            )
+          )
+          (cat): Conv2d(16, 8, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (conv1): ProcessBlock(
+        (spatial_process): SpaBlock(
+          (block): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (3): LeakyReLU(negative_slope=0.1, inplace=True)
+          )
+        )
+        (frequency_process): FreBlock(
+          (fpre): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          (process1): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (process2): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (cat): Conv2d(16, 8, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (conv2): ProcessBlock(
+        (spatial_process): SpaBlock(
+          (block): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (3): LeakyReLU(negative_slope=0.1, inplace=True)
+          )
+        )
+        (frequency_process): FreBlock(
+          (fpre): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          (process1): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (process2): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (cat): Conv2d(16, 8, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (conv3): ProcessBlock(
+        (spatial_process): SpaBlock(
+          (block): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (3): LeakyReLU(negative_slope=0.1, inplace=True)
+          )
+        )
+        (frequency_process): FreBlock(
+          (fpre): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          (process1): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (process2): Sequential(
+            (0): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Conv2d(8, 8, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (cat): Conv2d(16, 8, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (conv4): Sequential(
+        (0): ProcessBlock(
+          (spatial_process): SpaBlock(
+            (block): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (3): LeakyReLU(negative_slope=0.1, inplace=True)
+            )
+          )
+          (frequency_process): FreBlock(
+            (fpre): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            (process1): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (process2): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            )
+          )
+          (cat): Conv2d(32, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): Conv2d(16, 8, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (conv5): Sequential(
+        (0): ProcessBlock(
+          (spatial_process): SpaBlock(
+            (block): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (3): LeakyReLU(negative_slope=0.1, inplace=True)
+            )
+          )
+          (frequency_process): FreBlock(
+            (fpre): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            (process1): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (process2): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            )
+          )
+          (cat): Conv2d(32, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): Conv2d(16, 8, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (convout): Sequential(
+        (0): ProcessBlock(
+          (spatial_process): SpaBlock(
+            (block): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (3): LeakyReLU(negative_slope=0.1, inplace=True)
+            )
+          )
+          (frequency_process): FreBlock(
+            (fpre): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            (process1): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (process2): Sequential(
+              (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+              (1): LeakyReLU(negative_slope=0.1, inplace=True)
+              (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+            )
+          )
+          (cat): Conv2d(32, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): Conv2d(16, 3, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (1): Sigmoid()
+  )
+  (conv_first_1): Conv2d(6, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv_first_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+  (conv_first_3): Conv2d(16, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+  (feature_extraction): Sequential(
+    (0): ResidualBlock_noBN(
+      (conv1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+  (recon_trunk): Sequential(
+    (0): ResidualBlock_noBN(
+      (conv1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+  (upconv1): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (upconv2): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (pixel_shuffle): PixelShuffle(upscale_factor=2)
+  (HRconv): Conv2d(32, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv_last): Conv2d(16, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (lrelu): LeakyReLU(negative_slope=0.1, inplace=True)
+  (transformer): SFNet(
+    (conv1): ProcessBlock(
+      (spatial_process): Identity()
+      (frequency_process): FreBlock(
+        (fpre): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        (process1): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (process2): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (cat): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+    )
+    (conv2): ProcessBlock(
+      (spatial_process): Identity()
+      (frequency_process): FreBlock(
+        (fpre): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        (process1): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (process2): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (cat): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+    )
+    (conv3): ProcessBlock(
+      (spatial_process): Identity()
+      (frequency_process): FreBlock(
+        (fpre): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        (process1): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (process2): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (cat): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+    )
+    (conv4): ProcessBlock(
+      (spatial_process): Identity()
+      (frequency_process): FreBlock(
+        (fpre): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        (process1): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (process2): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (cat): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+    )
+    (conv5): ProcessBlock(
+      (spatial_process): Identity()
+      (frequency_process): FreBlock(
+        (fpre): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        (process1): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (process2): Sequential(
+          (0): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (cat): Conv2d(16, 16, kernel_size=(1, 1), stride=(1, 1))
+    )
+  )
+  (recon_trunk_light): Sequential(
+    (0): ResidualBlock_noBN(
+      (conv1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (1): ResidualBlock_noBN(
+      (conv1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (2): ResidualBlock_noBN(
+      (conv1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (3): ResidualBlock_noBN(
+      (conv1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (4): ResidualBlock_noBN(
+      (conv1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (5): ResidualBlock_noBN(
+      (conv1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+)
+23-12-17 11:27:27.252 - INFO: Model [enhancement_model] is created.
+23-12-17 11:27:27.252 - INFO: Start training from epoch: 0, iter: 0
+23-12-17 11:32:33.942 - INFO: [epoch:  3, iter:   1,000, lr:(9.900e-05,)] l_pix: 3.3205e+05 l_vgg: 3.9319e+05 
+23-12-17 11:33:46.056 - INFO: # Validation # PSNR: 1.9688e+01: best psnr : 1.9688e+01
+23-12-17 11:33:46.056 - INFO: # Validation # SSIM: 5.9372e-01: best ssim : 5.9372e-01
+23-12-17 11:33:46.056 - INFO: Saving models and training states.
+23-12-17 11:39:32.168 - INFO: [epoch:  6, iter:   2,000, lr:(9.900e-05,)] l_pix: 3.0069e+05 l_vgg: 2.9728e+05 
+23-12-17 11:40:09.743 - INFO: # Validation # PSNR: 2.0238e+01: best psnr : 2.0238e+01
+23-12-17 11:40:09.744 - INFO: # Validation # SSIM: 5.9781e-01: best ssim : 5.9781e-01
+23-12-17 11:40:09.744 - INFO: Saving models and training states.
+23-12-17 11:45:26.215 - INFO: [epoch:  9, iter:   3,000, lr:(9.900e-05,)] l_pix: 3.5329e+05 l_vgg: 3.2704e+05 
+23-12-17 11:46:04.677 - INFO: # Validation # PSNR: 2.0507e+01: best psnr : 2.0507e+01
+23-12-17 11:46:04.677 - INFO: # Validation # SSIM: 6.0267e-01: best ssim : 6.0267e-01
+23-12-17 11:46:04.677 - INFO: Saving models and training states.
+23-12-17 11:51:13.289 - INFO: [epoch: 13, iter:   4,000, lr:(9.900e-05,)] l_pix: 3.3124e+05 l_vgg: 3.3041e+05 
+23-12-17 11:51:51.121 - INFO: # Validation # PSNR: 2.0264e+01:
+23-12-17 11:51:51.122 - INFO: # Validation # SSIM: 5.9933e-01:
+23-12-17 11:51:51.122 - INFO: Saving models and training states.
+23-12-17 11:57:28.762 - INFO: [epoch: 16, iter:   5,000, lr:(9.900e-05,)] l_pix: 2.3883e+05 l_vgg: 2.7018e+05 
+23-12-17 11:58:07.766 - INFO: # Validation # PSNR: 2.0460e+01:
+23-12-17 11:58:07.766 - INFO: # Validation # SSIM: 5.9970e-01:
+23-12-17 11:58:07.766 - INFO: Saving models and training states.
+23-12-17 12:03:10.739 - INFO: [epoch: 19, iter:   6,000, lr:(9.900e-05,)] l_pix: 2.4640e+05 l_vgg: 2.7439e+05 
+23-12-17 12:03:48.372 - INFO: # Validation # PSNR: 2.0230e+01:
+23-12-17 12:03:48.372 - INFO: # Validation # SSIM: 5.9650e-01:
+23-12-17 12:03:48.372 - INFO: Saving models and training states.
+23-12-17 12:09:27.635 - INFO: [epoch: 22, iter:   7,000, lr:(9.900e-05,)] l_pix: 3.9478e+05 l_vgg: 3.9400e+05 
+23-12-17 12:10:05.023 - INFO: # Validation # PSNR: 2.0540e+01: best psnr : 2.0540e+01
+23-12-17 12:10:05.023 - INFO: # Validation # SSIM: 6.0300e-01: best ssim : 6.0300e-01
+23-12-17 12:10:05.024 - INFO: Saving models and training states.
+23-12-17 12:15:06.031 - INFO: [epoch: 26, iter:   8,000, lr:(9.900e-05,)] l_pix: 3.9017e+05 l_vgg: 3.0491e+05 
+23-12-17 12:15:43.721 - INFO: # Validation # PSNR: 2.0223e+01:
+23-12-17 12:15:43.722 - INFO: # Validation # SSIM: 5.9882e-01:
+23-12-17 12:15:43.722 - INFO: Saving models and training states.
+23-12-17 12:21:22.948 - INFO: [epoch: 29, iter:   9,000, lr:(9.900e-05,)] l_pix: 2.8198e+05 l_vgg: 2.3761e+05 
+23-12-17 12:22:01.246 - INFO: # Validation # PSNR: 2.0563e+01: best psnr : 2.0563e+01
+23-12-17 12:22:01.246 - INFO: # Validation # SSIM: 6.0155e-01:
+23-12-17 12:22:01.246 - INFO: Saving models and training states.
+23-12-17 12:27:31.955 - INFO: [epoch: 32, iter:  10,000, lr:(9.900e-05,)] l_pix: 3.2783e+05 l_vgg: 2.5479e+05 
+23-12-17 12:28:10.038 - INFO: # Validation # PSNR: 2.0624e+01: best psnr : 2.0624e+01
+23-12-17 12:28:10.038 - INFO: # Validation # SSIM: 6.0249e-01:
+23-12-17 12:28:10.038 - INFO: Saving models and training states.
+23-12-17 12:33:09.679 - INFO: [epoch: 35, iter:  11,000, lr:(9.900e-05,)] l_pix: 2.8878e+05 l_vgg: 3.0661e+05 
+23-12-17 12:33:48.328 - INFO: # Validation # PSNR: 2.0731e+01: best psnr : 2.0731e+01
+23-12-17 12:33:48.328 - INFO: # Validation # SSIM: 6.0414e-01: best ssim : 6.0414e-01
+23-12-17 12:33:48.328 - INFO: Saving models and training states.
+23-12-17 12:39:30.188 - INFO: [epoch: 39, iter:  12,000, lr:(9.900e-05,)] l_pix: 3.0330e+05 l_vgg: 2.4688e+05 
+23-12-17 12:40:08.060 - INFO: # Validation # PSNR: 2.0823e+01: best psnr : 2.0823e+01
+23-12-17 12:40:08.060 - INFO: # Validation # SSIM: 6.0550e-01: best ssim : 6.0550e-01
+23-12-17 12:40:08.060 - INFO: Saving models and training states.
+23-12-17 12:45:10.347 - INFO: [epoch: 42, iter:  13,000, lr:(9.900e-05,)] l_pix: 3.6959e+05 l_vgg: 3.0374e+05 
+23-12-17 12:45:48.611 - INFO: # Validation # PSNR: 2.0548e+01:
+23-12-17 12:45:48.611 - INFO: # Validation # SSIM: 6.0386e-01:
+23-12-17 12:45:48.611 - INFO: Saving models and training states.
+23-12-17 12:51:27.442 - INFO: [epoch: 45, iter:  14,000, lr:(9.900e-05,)] l_pix: 4.1812e+05 l_vgg: 2.6516e+05 
+23-12-17 12:52:05.191 - INFO: # Validation # PSNR: 2.0788e+01:
+23-12-17 12:52:05.192 - INFO: # Validation # SSIM: 6.0612e-01: best ssim : 6.0612e-01
+23-12-17 12:52:05.192 - INFO: Saving models and training states.
+23-12-17 12:57:09.075 - INFO: [epoch: 49, iter:  15,000, lr:(4.950e-05,)] l_pix: 2.4535e+05 l_vgg: 3.1167e+05 
+23-12-17 12:57:46.894 - INFO: # Validation # PSNR: 2.0475e+01:
+23-12-17 12:57:46.894 - INFO: # Validation # SSIM: 6.0639e-01: best ssim : 6.0639e-01
+23-12-17 12:57:46.894 - INFO: Saving models and training states.
+23-12-17 13:03:18.325 - INFO: [epoch: 52, iter:  16,000, lr:(4.950e-05,)] l_pix: 3.0434e+05 l_vgg: 4.1163e+05 
+23-12-17 13:03:55.554 - INFO: # Validation # PSNR: 2.0667e+01:
+23-12-17 13:03:55.554 - INFO: # Validation # SSIM: 6.0545e-01:
+23-12-17 13:03:55.554 - INFO: Saving models and training states.
+23-12-17 13:09:34.517 - INFO: [epoch: 55, iter:  17,000, lr:(4.950e-05,)] l_pix: 3.2335e+05 l_vgg: 2.6300e+05 
+23-12-17 13:10:12.335 - INFO: # Validation # PSNR: 2.0703e+01:
+23-12-17 13:10:12.335 - INFO: # Validation # SSIM: 6.0535e-01:
+23-12-17 13:10:12.335 - INFO: Saving models and training states.
+23-12-17 13:15:13.883 - INFO: [epoch: 58, iter:  18,000, lr:(4.950e-05,)] l_pix: 2.8522e+05 l_vgg: 2.4961e+05 
+23-12-17 13:15:52.158 - INFO: # Validation # PSNR: 2.0708e+01:
+23-12-17 13:15:52.159 - INFO: # Validation # SSIM: 6.0642e-01: best ssim : 6.0642e-01
+23-12-17 13:15:52.159 - INFO: Saving models and training states.
+23-12-17 13:21:34.062 - INFO: [epoch: 62, iter:  19,000, lr:(4.950e-05,)] l_pix: 3.4451e+05 l_vgg: 2.7713e+05 
+23-12-17 13:22:12.379 - INFO: # Validation # PSNR: 2.0827e+01: best psnr : 2.0827e+01
+23-12-17 13:22:12.379 - INFO: # Validation # SSIM: 6.0666e-01: best ssim : 6.0666e-01
+23-12-17 13:22:12.379 - INFO: Saving models and training states.
+23-12-17 13:27:11.409 - INFO: [epoch: 65, iter:  20,000, lr:(4.950e-05,)] l_pix: 2.4616e+05 l_vgg: 2.8836e+05 
+23-12-17 13:27:48.775 - INFO: # Validation # PSNR: 2.0451e+01:
+23-12-17 13:27:48.775 - INFO: # Validation # SSIM: 6.0355e-01:
+23-12-17 13:27:48.775 - INFO: Saving models and training states.
+23-12-17 13:33:28.290 - INFO: [epoch: 68, iter:  21,000, lr:(4.950e-05,)] l_pix: 3.5284e+05 l_vgg: 3.6192e+05 
+23-12-17 13:34:05.602 - INFO: # Validation # PSNR: 2.0658e+01:
+23-12-17 13:34:05.602 - INFO: # Validation # SSIM: 6.0584e-01:
+23-12-17 13:34:05.602 - INFO: Saving models and training states.
+23-12-17 13:39:08.830 - INFO: [epoch: 71, iter:  22,000, lr:(2.475e-05,)] l_pix: 3.0358e+05 l_vgg: 3.0530e+05 
+23-12-17 13:39:44.764 - INFO: # Validation # PSNR: 2.0709e+01:
+23-12-17 13:39:44.764 - INFO: # Validation # SSIM: 6.0624e-01:
+23-12-17 13:39:44.764 - INFO: Saving models and training states.
+23-12-17 13:45:09.552 - INFO: [epoch: 75, iter:  23,000, lr:(2.475e-05,)] l_pix: 3.1172e+05 l_vgg: 3.0675e+05 
+23-12-17 13:45:45.032 - INFO: # Validation # PSNR: 2.0695e+01:
+23-12-17 13:45:45.033 - INFO: # Validation # SSIM: 6.0645e-01:
+23-12-17 13:45:45.033 - INFO: Saving models and training states.
+23-12-17 13:51:23.327 - INFO: [epoch: 78, iter:  24,000, lr:(2.475e-05,)] l_pix: 3.3550e+05 l_vgg: 2.8570e+05 
+23-12-17 13:51:59.052 - INFO: # Validation # PSNR: 2.0785e+01:
+23-12-17 13:51:59.053 - INFO: # Validation # SSIM: 6.0777e-01: best ssim : 6.0777e-01
+23-12-17 13:51:59.053 - INFO: Saving models and training states.
+23-12-17 13:56:59.796 - INFO: [epoch: 81, iter:  25,000, lr:(2.475e-05,)] l_pix: 2.7407e+05 l_vgg: 3.6640e+05 
+23-12-17 13:57:34.788 - INFO: # Validation # PSNR: 2.0707e+01:
+23-12-17 13:57:34.788 - INFO: # Validation # SSIM: 6.0692e-01:
+23-12-17 13:57:34.788 - INFO: Saving models and training states.
+23-12-17 14:03:13.432 - INFO: [epoch: 84, iter:  26,000, lr:(2.475e-05,)] l_pix: 2.5124e+05 l_vgg: 3.3264e+05 
+23-12-17 14:03:50.294 - INFO: # Validation # PSNR: 2.0701e+01:
+23-12-17 14:03:50.295 - INFO: # Validation # SSIM: 6.0735e-01:
+23-12-17 14:03:50.295 - INFO: Saving models and training states.
+23-12-17 14:08:52.931 - INFO: [epoch: 88, iter:  27,000, lr:(2.475e-05,)] l_pix: 2.9661e+05 l_vgg: 3.4575e+05 
+23-12-17 14:09:28.377 - INFO: # Validation # PSNR: 2.0769e+01:
+23-12-17 14:09:28.377 - INFO: # Validation # SSIM: 6.0787e-01: best ssim : 6.0787e-01
+23-12-17 14:09:28.377 - INFO: Saving models and training states.
+23-12-17 14:15:08.300 - INFO: [epoch: 91, iter:  28,000, lr:(2.475e-05,)] l_pix: 2.5872e+05 l_vgg: 2.3245e+05 
+23-12-17 14:15:44.832 - INFO: # Validation # PSNR: 2.0775e+01:
+23-12-17 14:15:44.833 - INFO: # Validation # SSIM: 6.0805e-01: best ssim : 6.0805e-01
+23-12-17 14:15:44.833 - INFO: Saving models and training states.
+23-12-17 14:20:52.186 - INFO: [epoch: 94, iter:  29,000, lr:(2.475e-05,)] l_pix: 2.5002e+05 l_vgg: 3.0154e+05 
+23-12-17 14:21:29.462 - INFO: # Validation # PSNR: 2.0730e+01:
+23-12-17 14:21:29.463 - INFO: # Validation # SSIM: 6.0684e-01:
+23-12-17 14:21:29.463 - INFO: Saving models and training states.
+23-12-17 14:26:50.705 - INFO: [epoch: 98, iter:  30,000, lr:(1.237e-05,)] l_pix: 3.1530e+05 l_vgg: 2.6232e+05 
+23-12-17 14:27:27.593 - INFO: # Validation # PSNR: 2.0766e+01:
+23-12-17 14:27:27.594 - INFO: # Validation # SSIM: 6.0753e-01:
+23-12-17 14:27:27.594 - INFO: Saving models and training states.
+23-12-17 14:33:06.368 - INFO: [epoch:101, iter:  31,000, lr:(1.237e-05,)] l_pix: 3.4002e+05 l_vgg: 3.0334e+05 
+23-12-17 14:33:41.641 - INFO: # Validation # PSNR: 2.0797e+01:
+23-12-17 14:33:41.641 - INFO: # Validation # SSIM: 6.0815e-01: best ssim : 6.0815e-01
+23-12-17 14:33:41.641 - INFO: Saving models and training states.
+23-12-17 14:38:41.621 - INFO: [epoch:104, iter:  32,000, lr:(1.237e-05,)] l_pix: 3.7191e+05 l_vgg: 2.6915e+05 
+23-12-17 14:39:18.290 - INFO: # Validation # PSNR: 2.0750e+01:
+23-12-17 14:39:18.291 - INFO: # Validation # SSIM: 6.0714e-01:
+23-12-17 14:39:18.291 - INFO: Saving models and training states.
+23-12-17 14:44:55.302 - INFO: [epoch:107, iter:  33,000, lr:(1.237e-05,)] l_pix: 2.1732e+05 l_vgg: 2.7176e+05 
+23-12-17 14:45:31.772 - INFO: # Validation # PSNR: 2.0658e+01:
+23-12-17 14:45:31.772 - INFO: # Validation # SSIM: 6.0606e-01:
+23-12-17 14:45:31.772 - INFO: Saving models and training states.
+23-12-17 14:50:34.939 - INFO: [epoch:111, iter:  34,000, lr:(1.237e-05,)] l_pix: 2.7548e+05 l_vgg: 3.2942e+05 
+23-12-17 14:51:11.596 - INFO: # Validation # PSNR: 2.0787e+01:
+23-12-17 14:51:11.596 - INFO: # Validation # SSIM: 6.0847e-01: best ssim : 6.0847e-01
+23-12-17 14:51:11.596 - INFO: Saving models and training states.
+23-12-17 14:56:47.818 - INFO: [epoch:114, iter:  35,000, lr:(1.237e-05,)] l_pix: 2.2983e+05 l_vgg: 3.0803e+05 
+23-12-17 14:57:24.296 - INFO: # Validation # PSNR: 2.0612e+01:
+23-12-17 14:57:24.296 - INFO: # Validation # SSIM: 6.0600e-01:
+23-12-17 14:57:24.296 - INFO: Saving models and training states.
+23-12-17 15:02:34.625 - INFO: [epoch:117, iter:  36,000, lr:(1.237e-05,)] l_pix: 2.7792e+05 l_vgg: 3.6005e+05 
+23-12-17 15:03:11.636 - INFO: # Validation # PSNR: 2.0761e+01:
+23-12-17 15:03:11.636 - INFO: # Validation # SSIM: 6.0762e-01:
+23-12-17 15:03:11.636 - INFO: Saving models and training states.
+23-12-17 15:08:24.264 - INFO: [epoch:120, iter:  37,000, lr:(1.237e-05,)] l_pix: 3.5962e+05 l_vgg: 2.9140e+05 
+23-12-17 15:09:01.142 - INFO: # Validation # PSNR: 2.0751e+01:
+23-12-17 15:09:01.142 - INFO: # Validation # SSIM: 6.0702e-01:
+23-12-17 15:09:01.142 - INFO: Saving models and training states.
+23-12-17 15:14:40.405 - INFO: [epoch:124, iter:  38,000, lr:(1.237e-05,)] l_pix: 1.9921e+05 l_vgg: 2.6992e+05 
+23-12-17 15:15:16.980 - INFO: # Validation # PSNR: 2.0828e+01: best psnr : 2.0828e+01
+23-12-17 15:15:16.980 - INFO: # Validation # SSIM: 6.0840e-01:
+23-12-17 15:15:16.980 - INFO: Saving models and training states.
+23-12-17 15:20:18.205 - INFO: [epoch:127, iter:  39,000, lr:(1.237e-05,)] l_pix: 3.0683e+05 l_vgg: 2.4620e+05 
+23-12-17 15:20:54.846 - INFO: # Validation # PSNR: 2.0742e+01:
+23-12-17 15:20:54.846 - INFO: # Validation # SSIM: 6.0780e-01:
+23-12-17 15:20:54.846 - INFO: Saving models and training states.
+23-12-17 15:26:32.606 - INFO: [epoch:130, iter:  40,000, lr:(1.237e-05,)] l_pix: 2.1644e+05 l_vgg: 2.3194e+05 
+23-12-17 15:27:09.600 - INFO: # Validation # PSNR: 2.0776e+01:
+23-12-17 15:27:09.600 - INFO: # Validation # SSIM: 6.0794e-01:
+23-12-17 15:27:09.600 - INFO: Saving models and training states.
+23-12-17 15:32:12.382 - INFO: [epoch:133, iter:  41,000, lr:(1.237e-05,)] l_pix: 3.3759e+05 l_vgg: 3.6057e+05 
+23-12-17 15:32:55.077 - INFO: # Validation # PSNR: 2.0784e+01:
+23-12-17 15:32:55.077 - INFO: # Validation # SSIM: 6.0829e-01:
+23-12-17 15:32:55.077 - INFO: Saving models and training states.
+23-12-17 15:38:42.925 - INFO: [epoch:137, iter:  42,000, lr:(1.237e-05,)] l_pix: 3.8234e+05 l_vgg: 3.1608e+05 
+23-12-17 15:39:21.106 - INFO: # Validation # PSNR: 2.0677e+01:
+23-12-17 15:39:21.106 - INFO: # Validation # SSIM: 6.0685e-01:
+23-12-17 15:39:21.106 - INFO: Saving models and training states.
