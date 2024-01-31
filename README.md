@@ -1,4 +1,4 @@
-Eval 文件夹下为测试数据集，文件大小限制只放了 LSRW-Nikon 的一张图片。
+Eval 文件夹下为 LSRW-Huawei 测试数据集。
 
 pre_tsne.py 生成 t-SNE 可视化所需的五种数据到 tsne 文件夹下。
 
